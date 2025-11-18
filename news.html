@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest News - Daily Grand | Local News & Updates</title>
+    <meta name="description" content="Stay updated with the latest local news, community events, and important updates from your area.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Daily Grand</h1>
+            </div>
+            <ul class="nav-menu">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="news.html">News</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="advertise.html">Advertise</a></li>
+    <li><a href="enquiry.html">News Tips</a></li> <!-- ADD THIS LINE -->
+    <li><a href="contact.html">Contact</a></li>
+</ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h1>Latest News & Updates</h1>
+        <p class="page-description">Stay informed with the latest happenings in Grand City and surrounding communities.</p>
+
+        <!-- PART 3: Search Functionality -->
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search news articles..." onkeyup="searchNews()">
+            <button class="search-button" onclick="performSearch()">🔍</button>
+        </div>
+
+        <!-- PART 3: News Filter Tabs -->
+        <div class="news-filter">
+            <button class="filter-btn active" onclick="filterNews('all')" data-category="all">📰 All News</button>
+            <button class="filter-btn" onclick="filterNews('local')" data-category="local">🏠 Local News</button>
+            <button class="filter-btn" onclick="filterNews('events')" data-category="events">🎉 Events</button>
+            <button class="filter-btn" onclick="filterNews('updates')" data-category="updates">📢 Updates</button>
+            <button class="filter-btn" onclick="filterNews('business')" data-category="business">💼 Business</button>
+        </div>
+
+        <!-- News Articles Grid -->
+        <div class="news-grid" id="newsContainer">
+            <!-- Articles will be loaded by JavaScript -->
+        </div>
+
+        <!-- PART 3: Load More Button -->
+        <div class="load-more-container">
+            <button id="loadMoreBtn" class="load-more-btn">📰 Load More Articles</button>
+        </div>
+
+        <!-- PART 3: Image Gallery with Lightbox -->
+        <section class="news-gallery">
+            <h3>📸 Community Photo Gallery</h3>
+            <p>Recent photos from around Grand City</p>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="gallery-image" onclick="openLightbox(0)"></div>
+                    <p>Community Festival</p>
+                </div>
+                
+                <div class="gallery-item">
+                    <div class="gallery-image" onclick="openLightbox(1)"></div>
+                    <p>Park Opening</p>
+                </div>
+                
+                <div class="gallery-item">
+                    <div class="gallery-image" onclick="openLightbox(2)"></div>
+                    <p>Food Festival</p>
+                </div>
+                
+                <div class="gallery-item">
+                    <div class="gallery-image" onclick="openLightbox(3)"></div>
+                    <p>School Science Fair</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PART 3: Lightbox Modal -->
+        <div id="lightbox" class="lightbox">
+            <div class="lightbox-content">
+                <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+                <div id="lightbox-image" class="lightbox-image"></div>
+                <div class="lightbox-caption">
+                    <h4 id="lightbox-title"></h4>
+                    <p id="lightbox-description"></p>
+                </div>
+                <div class="lightbox-nav">
+                    <button class="nav-btn prev-btn" onclick="changeImage(-1)">❮ Previous</button>
+                    <span id="image-counter">1 / 4</span>
+                    <button class="nav-btn next-btn" onclick="changeImage(1)">Next ❯</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Newsletter Section -->
+        <section class="newsletter-section">
+            <h3>📬 Stay Updated</h3>
+            <p>Get the latest news delivered to your inbox every morning.</p>
+            <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                <input type="email" placeholder="Enter your email address" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 Daily Grand. All rights reserved.</p>
+        <p><a href="sitemap.xml">Sitemap</a> | <a href="contact.html">Contact Us</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

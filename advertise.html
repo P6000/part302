@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- PART 3: SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advertise With Us - Daily Grand | Reach Local Audience</title>
+    <meta name="description" content="Reach our engaged local audience. Advertising opportunities with Daily Grand for businesses and organizations.">
+    
+    <!-- PART 2: External CSS Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Semantic Header with Navigation -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Daily Grand</h1>
+            </div>
+            <!-- PART 3: Internal Linking for SEO -->
+            <ul class="nav-menu">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="news.html">News</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="advertise.html">Advertise</a></li>
+    <li><a href="enquiry.html">News Tips</a></li> <!-- ADD THIS LINE -->
+    <li><a href="contact.html">Contact</a></li>
+</ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="advertise-hero">
+            <h2>Advertise With Daily Grand</h2>
+            <p>Reach 50,000+ engaged local readers every month</p>
+        </section>
+
+        <!-- Advertising Statistics -->
+        <div class="ad-stats">
+            <div class="stat-item">
+                <h3>50,000+</h3>
+                <p>Monthly Readers</p>
+            </div>
+            <div class="stat-item">
+                <h3>15,000+</h3>
+                <p>Newsletter Subscribers</p>
+            </div>
+            <div class="stat-item">
+                <h3>72%</h3>
+                <p>Local Engagement Rate</p>
+            </div>
+        </div>
+
+        <!-- PART 3: Advertising Options -->
+        <section class="advertising-options">
+            <div class="option-card">
+                <h3>Banner Advertising</h3>
+                <p class="price">From R500/month</p>
+                <ul>
+                    <li>Premium banner placement on all pages</li>
+                    <li>Reach 50,000+ monthly readers</li>
+                    <li>Monthly performance reports</li>
+                    <li>Mobile-responsive design</li>
+                </ul>
+                <!-- FIXED: Links to contact page with package parameter -->
+                <a href="contact.html?package=banner" class="btn-inquire">Inquire Now</a>
+            </div>
+
+            <div class="option-card">
+                <h3>Sponsored Content</h3>
+                <p class="price">From R800/article</p>
+                <ul>
+                    <li>Featured article placement</li>
+                    <li>Social media promotion</li>
+                    <li>Professional writing included</li>
+                    <li>Google Analytics tracking</li>
+                </ul>
+                <!-- FIXED: Links to contact page with package parameter -->
+                <a href="contact.html?package=sponsored" class="btn-inquire">Inquire Now</a>
+            </div>
+
+            <div class="option-card">
+                <h3>Newsletter Sponsorship</h3>
+                <p class="price">From R300/edition</p>
+                <ul>
+                    <li>Featured in our weekly newsletter</li>
+                    <li>Direct link to your website</li>
+                    <li>15,000+ subscriber reach</li>
+                    <li>Open rate tracking</li>
+                </ul>
+                <!-- FIXED: Links to contact page with package parameter -->
+                <a href="contact.html?package=newsletter" class="btn-inquire">Inquire Now</a>
+            </div>
+        </section>
+
+        <!-- Additional Information Section -->
+        <section class="advertising-info">
+            <h3>Why Advertise With Daily Grand?</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <h4>📈 Proven Results</h4>
+                    <p>Our advertisers see an average 35% increase in local brand awareness within the first month.</p>
+                </div>
+                <div class="info-item">
+                    <h4>🎯 Targeted Audience</h4>
+                    <p>Reach engaged local readers who are actively interested in community news and events.</p>
+                </div>
+                <div class="info-item">
+                    <h4>💼 Local Business Focus</h4>
+                    <p>We specialize in helping local businesses connect with their ideal customers.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h3>Frequently Asked Questions</h3>
+            <div class="accordion">
+                <button class="accordion-btn">How quickly can my ad go live?</button>
+                <div class="accordion-content">
+                    <p>Most advertisements go live within 24-48 hours of approval and payment. Sponsored content may take 3-5 days for writing and editing.</p>
+                </div>
+                
+                <button class="accordion-btn">Do you offer discounts for long-term contracts?</button>
+                <div class="accordion-content">
+                    <p>Yes! We offer 15% discount for 6-month contracts and 25% discount for annual contracts on all advertising packages.</p>
+                </div>
+                
+                <button class="accordion-btn">Can I target specific audience segments?</button>
+                <div class="accordion-content">
+                    <p>Absolutely! We can target by location, interests, and reading habits. Discuss your target audience with our advertising team.</p>
+                </div>
+
+                <button class="accordion-btn">What payment methods do you accept?</button>
+                <div class="accordion-content">
+                    <p>We accept bank transfers, credit cards, and online payments. All transactions are secure and encrypted.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta-section">
+            <h3>Ready to Get Started?</h3>
+            <p>Contact our advertising team today to discuss your campaign goals and get a custom quote.</p>
+            <a href="contact.html" class="cta-button">Contact Advertising Team</a>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 Daily Grand. All rights reserved.</p>
+        <p>Advertising Inquiries: <a href="mailto:ads@dailygrand.com">ads@dailygrand.com</a> | Phone: (012) 345-6792</p>
+    </footer>
+
+    <script>
+        // Initialize accordions when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAccordions();
+        });
+
+        // Accordion functionality
+        function initializeAccordions() {
+            const accordionBtns = document.querySelectorAll('.accordion-btn');
+            
+            accordionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    
+                    if (content.classList.contains('active')) {
+                        content.classList.remove('active');
+                    } else {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

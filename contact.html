@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Daily Grand | Get In Touch</title>
+    <meta name="description" content="Contact Daily Grand for general inquiries, feedback, or customer service. We're here to help and value your input.">
+    
+    <!-- PART 3: SEO Meta Tags -->
+    <meta name="keywords" content="contact daily grand, news inquiry, media contact, customer service, feedback form">
+    <meta name="author" content="Daily Grand Media">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://dailygrand.com/contact.html">
+    
+    <!-- PART 3: Open Graph Meta Tags for Social Media SEO -->
+    <meta property="og:title" content="Contact Daily Grand - Get In Touch With Our News Team">
+    <meta property="og:description" content="Reach out to Daily Grand for inquiries, feedback, or news tips. We value your input and respond promptly.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dailygrand.com/contact.html">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PART 3: Leaflet Maps CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Daily Grand</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="advertise.html">Advertise</a></li>
+                <li><a href="enquiry.html">News Tips</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+            </ul>
+            
+            <!-- PART 3: Search Functionality -->
+            <div class="search-container">
+                <input type="text" id="siteSearch" placeholder="Search news, topics..." class="search-input">
+                <button onclick="performSearch()" class="search-btn">🔍</button>
+                <div id="searchResults" class="search-results"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h1>Contact Us</h1>
+        <p class="page-description">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+        
+        <!-- Contact information section -->
+        <div class="contact-info">
+            <div class="contact-item">
+                <h3>📍 Our Office</h3>
+                <p>123 Main Street<br>Grand City, GC 12345<br>South Africa</p>
+            </div>
+            <div class="contact-item">
+                <h3>📞 Phone</h3>
+                <p>Office: (012) 345-6789<br>News Desk: (012) 345-6790<br>WhatsApp: (012) 345-6791</p>
+            </div>
+            <div class="contact-item">
+                <h3>✉️ Email</h3>
+                <p>General: info@dailygrand.com<br>Editorial: editor@dailygrand.com<br>Support: help@dailygrand.com</p>
+            </div>
+        </div>
+
+        <!-- PART 3: Interactive Map with Leaflet -->
+        <div class="map-container">
+            <h3>Find Us</h3>
+            <div id="interactiveMap" class="interactive-map">
+                <!-- Map will be loaded here by JavaScript -->
+            </div>
+            <div class="map-controls">
+                <button onclick="getUserLocation()" class="location-btn">📍 Get My Location</button>
+                <button onclick="showMapDirections()" class="directions-btn">🚗 Get Directions</button>
+            </div>
+        </div>
+        
+        <!-- PART 3: Enhanced Contact form with AJAX validation -->
+        <form id="contactForm" class="contact-form" novalidate>
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required minlength="2" maxlength="50"
+                       data-validation="name" onblur="validateField(this)">
+                <div class="error-message" id="nameError"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required
+                       data-validation="email" onblur="validateField(this)">
+                <div class="error-message" id="emailError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" 
+                       pattern="[0-9+\-\s()]{10,}" 
+                       placeholder="e.g., 012 345 6789"
+                       data-validation="phone" onblur="validateField(this)">
+                <div class="error-message" id="phoneError"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="subject">Subject:</label>
+                <select id="subject" name="subject" required
+                        data-validation="select" onchange="validateField(this)">
+                    <option value="">Select a subject...</option>
+                    <option value="general">General Inquiry</option>
+                    <option value="feedback">Website Feedback</option>
+                    <option value="news-tip">News Tip</option>
+                    <option value="subscription">Subscription Issue</option>
+                    <option value="technical">Technical Problem</option>
+                    <option value="partnership">Partnership Opportunity</option>
+                    <option value="other">Other</option>
+                </select>
+                <div class="error-message" id="subjectError"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="6" required 
+                          minlength="10" maxlength="1000"
+                          placeholder="Please describe your inquiry in detail..."
+                          data-validation="message" oninput="updateCharCount(this)"></textarea>
+                <div class="char-count"><span id="charCount">0</span>/1000 characters</div>
+                <div class="error-message" id="messageError"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="newsletter" name="newsletter">
+                    Subscribe to our weekly newsletter for updates
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="privacy" name="privacy" required
+                           data-validation="checkbox" onchange="validateField(this)">
+                    I agree to the privacy policy and terms of service
+                </label>
+                <div class="error-message" id="privacyError"></div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="submit-btn">Send Message</button>
+                <button type="button" class="secondary-btn" onclick="generateEmail()">Generate Email Instead</button>
+                <button type="button" class="clear-btn" onclick="clearForm()">Clear Form</button>
+            </div>
+        </form>
+
+        <!-- PART 3: Dynamic response container -->
+        <div id="formResponse"></div>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h3>Common Questions</h3>
+            <div class="accordion">
+                <button class="accordion-btn">How quickly will I receive a response?</button>
+                <div class="accordion-content">
+                    <p>We typically respond to all inquiries within 24-48 hours. For urgent matters, please call our office directly.</p>
+                </div>
+                
+                <button class="accordion-btn">Do you accept news tips from the public?</button>
+                <div class="accordion-content">
+                    <p>Yes! We welcome news tips from our readers. Use the "News Tip" subject option and provide as much detail as possible.</p>
+                </div>
+                
+                <button class="accordion-btn">Can I submit a story or article for publication?</button>
+                <div class="accordion-content">
+                    <p>We accept guest contributions. Please use the "Partnership Opportunity" subject and include your writing samples.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 Daily Grand. All rights reserved.</p>
+        <p>
+            <a href="sitemap.xml">Sitemap</a> | 
+            <a href="privacy.html">Privacy Policy</a> |
+            <a href="robots.txt">Robots.txt</a>
+        </p>
+    </footer>
+
+    <!-- PART 3: Leaflet Maps JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // Global variables
+        let map;
+        let userMarker;
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Contact page initialized');
+            
+            // Initialize interactive map
+            initializeMap();
+            
+            // Add form submission handler
+            document.getElementById('contactForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                validateContactForm();
+            });
+            
+            // Initialize accordions
+            initializeAccordions();
+
+            // Auto-fill from URL parameters (for advertising inquiries)
+            autoFillFromPackage();
+
+            // Initialize search functionality
+            initializeSearch();
+        });
+
+        // PART 3: Initialize Interactive Map with Leaflet
+        function initializeMap() {
+            // Default coordinates for Grand City, South Africa
+            const defaultCoords = [-25.744, 28.186];
+            
+            // Create map instance
+            map = L.map('interactiveMap').setView(defaultCoords, 13);
+            
+            // Add tile layer (OpenStreetMap)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 18
+            }).addTo(map);
+            
+            // Add marker for Daily Grand office
+            const officeMarker = L.marker(defaultCoords)
+                .addTo(map)
+                .bindPopup(`
+                    <strong>Daily Grand Headquarters</strong><br>
+                    123 Main Street<br>
+                    Grand City, GC 12345<br>
+                    <button onclick="showMapDirections()" style="margin-top: 8px; padding: 5px 10px; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        Get Directions
+                    </button>
+                `)
+                .openPopup();
+            
+            // Add circle to show area
+            L.circle(defaultCoords, {
+                color: '#3498db',
+                fillColor: '#3498db',
+                fillOpacity: 0.1,
+                radius: 500
+            }).addTo(map);
+        }
+
+        // PART 3: Get user's location for map
+        function getUserLocation() {
+            if (!navigator.geolocation) {
+                alert('Geolocation is not supported by your browser');
+                return;
+            }
+            
+            const locationBtn = document.querySelector('.location-btn');
+            locationBtn.innerHTML = '📍 Locating...';
+            locationBtn.disabled = true;
+            
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const userCoords = [position.coords.latitude, position.coords.longitude];
+                    
+                    // Add user location marker
+                    if (userMarker) {
+                        map.removeLayer(userMarker);
+                    }
+                    
+                    userMarker = L.marker(userCoords)
+                        .addTo(map)
+                        .bindPopup('<strong>Your Location</strong>')
+                        .openPopup();
+                    
+                    // Add circle for user location
+                    L.circle(userCoords, {
+                        color: '#e74c3c',
+                        fillColor: '#e74c3c',
+                        fillOpacity: 0.1,
+                        radius: 200
+                    }).addTo(map);
+                    
+                    // Fit map to show both locations
+                    const group = new L.featureGroup([map, userMarker]);
+                    map.fitBounds(group.getBounds().pad(0.1));
+                    
+                    locationBtn.innerHTML = '📍 Location Found';
+                    setTimeout(() => {
+                        locationBtn.innerHTML = '📍 Get My Location';
+                        locationBtn.disabled = false;
+                    }, 2000);
+                },
+                function(error) {
+                    console.error('Error getting location:', error);
+                    alert('Unable to retrieve your location. Please ensure location services are enabled.');
+                    locationBtn.innerHTML = '📍 Get My Location';
+                    locationBtn.disabled = false;
+                }
+            );
+        }
+
+        // PART 3: Enhanced Form Validation with Real-time Feedback
+        function validateField(field) {
+            const fieldType = field.getAttribute('data-validation');
+            const errorElement = document.getElementById(field.id + 'Error');
+            let isValid = true;
+            let errorMessage = '';
+
+            switch(fieldType) {
+                case 'name':
+                    if (field.value.trim().length < 2) {
+                        errorMessage = 'Name must be at least 2 characters long';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'email':
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(field.value.trim())) {
+                        errorMessage = 'Please enter a valid email address';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'phone':
+                    if (field.value && !validatePhoneNumber(field.value)) {
+                        errorMessage = 'Please enter a valid phone number';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'select':
+                    if (!field.value) {
+                        errorMessage = 'Please select an option';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'message':
+                    if (field.value.trim().length < 10) {
+                        errorMessage = 'Message must be at least 10 characters long';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'checkbox':
+                    if (!field.checked) {
+                        errorMessage = 'This field is required';
+                        isValid = false;
+                    }
+                    break;
+            }
+
+            // Update field styling
+            if (isValid) {
+                field.classList.remove('error');
+                field.classList.add('valid');
+                errorMessage = '';
+            } else {
+                field.classList.remove('valid');
+                field.classList.add('error');
+            }
+            
+            if (errorElement) {
+                errorElement.textContent = errorMessage;
+            }
+            
+            return isValid;
+        }
+
+        // PART 3: Enhanced Contact Form Validation
+        function validateContactForm() {
+            const fields = [
+                'name', 'email', 'subject', 'message', 'privacy'
+            ];
+            
+            let isValid = true;
+            
+            // Validate all required fields
+            fields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!validateField(field)) {
+                    isValid = false;
+                }
+            });
+            
+            // Validate phone if provided
+            const phoneField = document.getElementById('phone');
+            if (phoneField.value && !validateField(phoneField)) {
+                isValid = false;
+            }
+            
+            if (isValid) {
+                submitContactForm();
+            } else {
+                // Scroll to first error
+                const firstError = document.querySelector('.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        // PART 3: AJAX Form Submission with Enhanced Error Handling
+        function submitContactForm() {
+            const formData = new FormData(document.getElementById('contactForm'));
+            const formObject = Object.fromEntries(formData);
+            
+            // Show loading state with animation
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
+            submitBtn.disabled = true;
+            
+            // Simulate AJAX call to form processing endpoint
+            fetch('https://jsonplaceholder.typicode.com/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formObject)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Simulate successful form processing
+                const mockResponse = {
+                    success: true,
+                    message: 'Message sent successfully!',
+                    data: {
+                        name: formObject.name,
+                        email: formObject.email,
+                        subject: document.querySelector(`#subject option[value="${formObject.subject}"]`).textContent,
+                        ticketNumber: 'CONTACT' + Date.now().toString().slice(-6),
+                        responseTime: 'within 48 hours',
+                        newsletter: formObject.newsletter ? 'subscribed' : 'not subscribed',
+                        timestamp: new Date().toISOString()
+                    }
+                };
+                showFormResponse(mockResponse);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showFormError('Failed to send message. Please try again or use the email option.');
+            })
+            .finally(() => {
+                // Reset button state
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
+        }
+
+        // PART 3: Enhanced Response Display with Animation
+        function showFormResponse(response) {
+            const responseElement = document.getElementById('formResponse');
+            
+            const successMessage = `
+                <div class="success-message animated-entry">
+                    <div class="success-header">
+                        <h3>✅ ${response.message}</h3>
+                        <button onclick="this.parentElement.parentElement.remove()" class="close-btn">×</button>
+                    </div>
+                    <div class="success-details">
+                        <p>Thank you, <strong>${response.data.name}</strong>! Your <strong>${response.data.subject.toLowerCase()}</strong> has been received.</p>
+                        <p>We will respond to <strong>${response.data.email}</strong> ${response.data.responseTime}.</p>
+                        <div class="response-meta">
+                            <p><strong>Newsletter:</strong> ${response.data.newsletter}</p>
+                            <p><strong>Submitted:</strong> ${new Date(response.data.timestamp).toLocaleString()}</p>
+                            <p><em>Ticket #: ${response.data.ticketNumber}</em></p>
+                        </div>
+                    </div>
+                    <div class="success-actions">
+                        <button onclick="printResponse()" class="print-btn">🖨️ Print Confirmation</button>
+                        <button onclick="clearForm()" class="clear-btn">📝 New Message</button>
+                    </div>
+                </div>
+            `;
+            
+            responseElement.innerHTML = successMessage;
+            document.getElementById('contactForm').reset();
+            document.getElementById('charCount').textContent = '0';
+            
+            // Clear validation styles
+            document.querySelectorAll('.valid, .error').forEach(el => {
+                el.classList.remove('valid', 'error');
+            });
+            
+            responseElement.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+
+        // PART 3: Search Functionality Implementation
+        function initializeSearch() {
+            const searchInput = document.getElementById('siteSearch');
+            const searchResults = document.getElementById('searchResults');
+            
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                if (query.length < 2) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+                
+                // Simulate search results
+                const results = performLocalSearch(query);
+                displaySearchResults(results);
+            });
+            
+            // Close results when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
+        }
+
+        function performLocalSearch(query) {
+            // Mock search results - in real implementation, this would query a database
+            const allContent = [
+                { title: 'Breaking News: Local Event', url: 'news.html#breaking', category: 'News' },
+                { title: 'About Daily Grand', url: 'about.html', category: 'About' },
+                { title: 'Advertising Opportunities', url: 'advertise.html', category: 'Advertise' },
+                { title: 'Submit News Tips', url: 'enquiry.html', category: 'News Tips' },
+                { title: 'Contact Information', url: 'contact.html', category: 'Contact' },
+                { title: 'Privacy Policy', url: 'privacy.html', category: 'Legal' }
+            ];
+            
+            return allContent.filter(item => 
+                item.title.toLowerCase().includes(query.toLowerCase()) ||
+                item.category.toLowerCase().includes(query.toLowerCase())
+            );
+        }
+
+        function displaySearchResults(results) {
+            const searchResults = document.getElementById('searchResults');
+            
+            if (results.length === 0) {
+                searchResults.innerHTML = '<div class="no-results">No results found</div>';
+                searchResults.style.display = 'block';
+                return;
+            }
+            
+            const resultsHTML = results.map(result => `
+                <a href="${result.url}" class="search-result-item">
+                    <strong>${result.title}</strong>
+                    <span class="search-category">${result.category}</span>
+                </a>
+            `).join('');
+            
+            searchResults.innerHTML = resultsHTML;
+            searchResults.style.display = 'block';
+        }
+
+        function performSearch() {
+            const query = document.getElementById('siteSearch').value.trim();
+            if (query) {
+                // In real implementation, redirect to search results page
+                alert(`Searching for: ${query}\n\nThis would redirect to a search results page in a full implementation.`);
+                document.getElementById('searchResults').style.display = 'none';
+            }
+        }
+
+        // PART 3: Utility Functions
+        function updateCharCount(textarea) {
+            const count = textarea.value.length;
+            document.getElementById('charCount').textContent = count;
+            
+            const charCount = document.querySelector('#message + .char-count');
+            if (count > 900) {
+                charCount.className = 'char-count error';
+            } else if (count > 800) {
+                charCount.className = 'char-count warning';
+            } else {
+                charCount.className = 'char-count';
+            }
+            
+            // Real-time validation
+            validateField(textarea);
+        }
+
+        function clearForm() {
+            document.getElementById('contactForm').reset();
+            document.getElementById('charCount').textContent = '0';
+            document.getElementById('formResponse').innerHTML = '';
+            
+            // Clear validation styles
+            document.querySelectorAll('.valid, .error').forEach(el => {
+                el.classList.remove('valid', 'error');
+            });
+            
+            // Clear error messages
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.textContent = '';
+            });
+        }
+
+        function printResponse() {
+            const responseContent = document.querySelector('.success-message').cloneNode(true);
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Daily Grand - Contact Confirmation</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            .confirmation { border: 2px solid #27ae60; padding: 20px; border-radius: 8px; }
+                            .header { text-align: center; color: #27ae60; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="confirmation">
+                            ${responseContent.innerHTML}
+                        </div>
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Existing helper functions (kept for compatibility)
+        function autoFillFromPackage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const packageType = urlParams.get('package');
+            
+            if (packageType) {
+                const packageNames = {
+                    'banner': 'Banner Advertising Inquiry',
+                    'sponsored': 'Sponsored Content Inquiry', 
+                    'newsletter': 'Newsletter Sponsorship Inquiry'
+                };
+                
+                document.getElementById('subject').value = 'partnership';
+                
+                const messageTextarea = document.getElementById('message');
+                if (messageTextarea) {
+                    messageTextarea.value = `I'm interested in learning more about your ${packageNames[packageType]} package. Please send me more information about pricing, availability, and next steps.\n\n`;
+                    updateCharCount(messageTextarea);
+                }
+            }
+        }
+
+        function validatePhoneNumber(phone) {
+            const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
+            return phoneRegex.test(phone);
+        }
+
+        function generateEmail() {
+            const name = document.getElementById('name').value || 'Customer';
+            const email = document.getElementById('email').value || 'customer@example.com';
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            const subjectText = document.querySelector(`#subject option[value="${subject}"]`).textContent;
+            const emailSubject = `Daily Grand Contact: ${subjectText}`;
+            const emailBody = `
+Dear Daily Grand Team,
+
+Name: ${name}
+Email: ${email}
+Subject: ${subjectText}
+
+Message:
+${message}
+
+Best regards,
+${name}
+            `.trim();
+            
+            const mailtoLink = `mailto:info@dailygrand.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            window.location.href = mailtoLink;
+        }
+
+        function showMapDirections() {
+            const address = "123 Main Street, Grand City, South Africa";
+            const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
+            window.open(mapsUrl, '_blank');
+        }
+
+        function initializeAccordions() {
+            const accordionBtns = document.querySelectorAll('.accordion-btn');
+            
+            accordionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    
+                    if (content.classList.contains('active')) {
+                        content.classList.remove('active');
+                    } else {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        }
+    </script>
+
+    <style>
+        /* PART 3: Additional CSS for new features */
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+        
+        .search-btn {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin-left: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 1000;
+        }
+        
+        .search-result-item {
+            display: block;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            text-decoration: none;
+            color: #333;
+        }
+        
+        .search-result-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .search-category {
+            font-size: 0.8em;
+            color: #666;
+            float: right;
+        }
+        
+        .interactive-map {
+            height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .map-controls {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .location-btn, .directions-btn {
+            padding: 8px 16px;
+            border: 1px solid #3498db;
+            background: white;
+            color: #3498db;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .location-btn:hover, .directions-btn:hover {
+            background: #3498db;
+            color: white;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .clear-btn {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .clear-btn:hover {
+            background: #7f8c8d;
+        }
+        
+        .success-message.animated-entry {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .success-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        input.valid, textarea.valid, select.valid {
+            border-color: #27ae60 !important;
+        }
+        
+        input.error, textarea.error, select.error {
+            border-color: #e74c3c !important;
+        }
+    </style>
+</body>
+</html>

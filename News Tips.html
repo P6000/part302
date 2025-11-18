@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit News Tip - Daily Grand | Share Your Story</title>
+    <meta name="description" content="Have a news tip or story idea? Submit it to Daily Grand. We value community contributions and investigative leads.">
+    
+    <!-- PART 3: SEO Meta Tags -->
+    <meta name="keywords" content="news tips, story submission, investigative journalism, community news, daily grand tips">
+    <meta name="author" content="Daily Grand Media">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://dailygrand.com/enquiry.html">
+    
+    <!-- PART 3: Open Graph Meta Tags -->
+    <meta property="og:title" content="Submit News Tips - Daily Grand Journalism">
+    <meta property="og:description" content="Share your news tips and story ideas with Daily Grand. Confidential submissions welcome.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dailygrand.com/enquiry.html">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PART 3: Leaflet Maps CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Daily Grand</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="advertise.html">Advertise</a></li>
+                <li><a href="enquiry.html" class="active">News Tips</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h1>Submit a News Tip</h1>
+        <p class="page-description">Have a story idea or news tip? We value community contributions. All submissions are confidential.</p>
+
+        <!-- PART 3: Interactive Map for Location-based Tips -->
+        <div class="map-container">
+            <h3>📍 Location of Your Tip (Optional)</h3>
+            <div id="newsTipMap" class="interactive-map">
+                <!-- Map will be loaded here by JavaScript -->
+            </div>
+            <div class="map-controls">
+                <button onclick="getUserLocationForTip()" class="location-btn">📍 Use My Current Location</button>
+                <button onclick="clearMapSelection()" class="clear-btn">🗑️ Clear Location</button>
+            </div>
+            <input type="hidden" id="selectedLocation" name="selectedLocation">
+        </div>
+
+        <!-- PART 3: Enhanced News Tip Form with AJAX -->
+        <form id="enquiryForm" class="contact-form" novalidate>
+            <div class="form-group">
+                <label for="tipType">Type of Submission:</label>
+                <select id="tipType" name="tipType" required data-validation="select" onchange="validateField(this)">
+                    <option value="">Select type...</option>
+                    <option value="news-tip">Breaking News Tip</option>
+                    <option value="event">Community Event</option>
+                    <option value="investigation">Investigative Lead</option>
+                    <option value="correction">Fact Correction</option>
+                    <option value="story-idea">Feature Story Idea</option>
+                </select>
+                <div class="error-message" id="tipTypeError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Your Name (Optional):</label>
+                <input type="text" id="name" name="name" placeholder="Leave blank for anonymous submission"
+                       data-validation="name" onblur="validateField(this)">
+                <div class="error-message" id="nameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required
+                       data-validation="email" onblur="validateField(this)">
+                <div class="error-message" id="emailError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone" 
+                       pattern="[0-9+\-\s()]{10,}" 
+                       placeholder="e.g., 012 345 6789"
+                       data-validation="phone" onblur="validateField(this)">
+                <div class="error-message" id="phoneError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="urgency">Urgency Level:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="urgency" value="low" checked data-validation="radio"> 📋 Low (General Info)</label>
+                    <label><input type="radio" name="urgency" value="medium" data-validation="radio"> ⚠️ Medium (Time-sensitive)</label>
+                    <label><input type="radio" name="urgency" value="high" data-validation="radio"> 🔥 High (Breaking News)</label>
+                    <label><input type="radio" name="urgency" value="critical" data-validation="radio"> 🚨 Critical (Public Safety)</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Headline/Subject:</label>
+                <input type="text" id="subject" name="subject" required maxlength="100" 
+                       placeholder="Brief summary of your tip"
+                       data-validation="subject" onblur="validateField(this)">
+                <div class="error-message" id="subjectError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Detailed Information:</label>
+                <textarea id="message" name="message" rows="6" required minlength="20" maxlength="1000" 
+                          placeholder="Please provide detailed information: who, what, when, where, why..."
+                          data-validation="message" oninput="updateCharCount(this)"></textarea>
+                <div class="char-count"><span id="charCount">0</span>/1000 characters</div>
+                <div class="error-message" id="messageError"></div>
+            </div>
+
+            <!-- PART 3: File Upload for Evidence -->
+            <div class="form-group">
+                <label for="attachments">Attach Files (Optional):</label>
+                <input type="file" id="attachments" name="attachments" 
+                       multiple accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+                       onchange="validateFiles(this)">
+                <div class="file-info" id="fileInfo"></div>
+                <div class="error-message" id="attachmentsError"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="confidential" name="confidential">
+                    🔒 Keep my submission confidential
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="followUp" name="followUp" required
+                           data-validation="checkbox" onchange="validateField(this)">
+                    ✅ I agree to be contacted for follow-up questions
+                </label>
+                <div class="error-message" id="followUpError"></div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="submit-btn">📨 Submit News Tip</button>
+                <button type="button" class="secondary-btn" onclick="generateNewsTipEmail()">📧 Generate Email Instead</button>
+                <button type="button" class="clear-btn" onclick="clearEnquiryForm()">🗑️ Clear Form</button>
+            </div>
+        </form>
+
+        <!-- PART 3: Dynamic Response Container -->
+        <div id="enquiryResponse"></div>
+
+        <!-- PART 3: Submission Guidelines Accordion -->
+        <section class="faq-section">
+            <h3>📋 Submission Guidelines</h3>
+            <div class="accordion">
+                <button class="accordion-btn">What types of tips are we looking for?</button>
+                <div class="accordion-content">
+                    <p>We welcome: Breaking news, community events, investigative leads, public safety concerns, human interest stories, and factual corrections.</p>
+                </div>
+                
+                <button class="accordion-btn">How do we handle confidential tips?</button>
+                <div class="accordion-content">
+                    <p>Anonymous tips are protected. We never reveal sources without explicit permission. All data is encrypted and secure.</p>
+                </div>
+                
+                <button class="accordion-btn">What happens after I submit?</button>
+                <div class="accordion-content">
+                    <p>Our editorial team reviews all submissions within 24 hours. For urgent matters, we may contact you immediately.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PART 3: Recent News Categories for Inspiration -->
+        <section class="news-categories">
+            <h3>📰 Popular News Categories</h3>
+            <div class="category-tags">
+                <span class="category-tag" onclick="fillCategory('Politics')">🏛️ Politics</span>
+                <span class="category-tag" onclick="fillCategory('Crime')">🚔 Crime & Safety</span>
+                <span class="category-tag" onclick="fillCategory('Environment')">🌳 Environment</span>
+                <span class="category-tag" onclick="fillCategory('Education')">🎓 Education</span>
+                <span class="category-tag" onclick="fillCategory('Health')">🏥 Health</span>
+                <span class="category-tag" onclick="fillCategory('Business')">💼 Business</span>
+                <span class="category-tag" onclick="fillCategory('Technology')">💻 Technology</span>
+                <span class="category-tag" onclick="fillCategory('Entertainment')">🎭 Entertainment</span>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 Daily Grand. All rights reserved.</p>
+        <p>News Tips: <a href="mailto:tips@dailygrand.com">tips@dailygrand.com</a> | Secure Line: (012) 345-6793</p>
+        <p>
+            <a href="sitemap.xml">Sitemap</a> | 
+            <a href="privacy.html">Privacy Policy</a> |
+            <a href="robots.txt">Robots.txt</a>
+        </p>
+    </footer>
+
+    <!-- PART 3: Leaflet Maps JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // Global variables
+        let tipMap;
+        let tipMarker;
+        let selectedLocation = null;
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('News Tips page initialized');
+            
+            // Initialize interactive map for news tips
+            initializeTipMap();
+            
+            // Add form submission handler
+            document.getElementById('enquiryForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                validateEnquiryForm();
+            });
+            
+            // Initialize accordions
+            initializeAccordions();
+
+            // Add real-time validation
+            initializeRealTimeValidation();
+        });
+
+        // PART 3: Initialize Interactive Map for News Tips
+        function initializeTipMap() {
+            // Default coordinates for Grand City, South Africa
+            const defaultCoords = [-25.744, 28.186];
+            
+            // Create map instance
+            tipMap = L.map('newsTipMap').setView(defaultCoords, 12);
+            
+            // Add tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 18
+            }).addTo(tipMap);
+            
+            // Add click event to select location
+            tipMap.on('click', function(e) {
+                selectMapLocation(e.latlng);
+            });
+            
+            // Add instruction popup
+            L.popup()
+                .setLatLng(defaultCoords)
+                .setContent('Click on the map to select the location of your news tip')
+                .openOn(tipMap);
+        }
+
+        // PART 3: Select location on map
+        function selectMapLocation(latlng) {
+            // Remove existing marker
+            if (tipMarker) {
+                tipMap.removeLayer(tipMarker);
+            }
+            
+            // Add new marker
+            tipMarker = L.marker(latlng)
+                .addTo(tipMap)
+                .bindPopup(`
+                    <strong>Selected Location</strong><br>
+                    Lat: ${latlng.lat.toFixed(4)}<br>
+                    Lng: ${latlng.lng.toFixed(4)}<br>
+                    <button onclick="clearMapSelection()" style="margin-top: 5px; padding: 3px 8px; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer;">
+                        Remove
+                    </button>
+                `)
+                .openPopup();
+            
+            // Store location
+            selectedLocation = latlng;
+            document.getElementById('selectedLocation').value = JSON.stringify(selectedLocation);
+            
+            // Update map view
+            tipMap.setView(latlng, 15);
+        }
+
+        // PART 3: Get user's current location
+        function getUserLocationForTip() {
+            if (!navigator.geolocation) {
+                alert('Geolocation is not supported by your browser');
+                return;
+            }
+            
+            const locationBtn = document.querySelector('.location-btn');
+            locationBtn.innerHTML = '📍 Locating...';
+            locationBtn.disabled = true;
+            
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const userCoords = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    
+                    selectMapLocation(userCoords);
+                    
+                    locationBtn.innerHTML = '📍 Location Set';
+                    setTimeout(() => {
+                        locationBtn.innerHTML = '📍 Use My Current Location';
+                        locationBtn.disabled = false;
+                    }, 2000);
+                },
+                function(error) {
+                    console.error('Error getting location:', error);
+                    alert('Unable to retrieve your location. Please ensure location services are enabled.');
+                    locationBtn.innerHTML = '📍 Use My Current Location';
+                    locationBtn.disabled = false;
+                }
+            );
+        }
+
+        function clearMapSelection() {
+            if (tipMarker) {
+                tipMap.removeLayer(tipMarker);
+                tipMarker = null;
+            }
+            selectedLocation = null;
+            document.getElementById('selectedLocation').value = '';
+        }
+
+        // PART 3: Enhanced Form Validation
+        function initializeRealTimeValidation() {
+            // Add input event listeners for real-time validation
+            const fields = document.querySelectorAll('[data-validation]');
+            fields.forEach(field => {
+                if (field.type !== 'checkbox' && field.type !== 'radio') {
+                    field.addEventListener('blur', function() {
+                        validateField(this);
+                    });
+                }
+            });
+        }
+
+        function validateField(field) {
+            const fieldType = field.getAttribute('data-validation');
+            const errorElement = document.getElementById(field.id + 'Error');
+            let isValid = true;
+            let errorMessage = '';
+
+            switch(fieldType) {
+                case 'select':
+                    if (!field.value) {
+                        errorMessage = 'Please select an option';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'email':
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(field.value.trim())) {
+                        errorMessage = 'Please enter a valid email address';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'phone':
+                    if (field.value && !validatePhoneNumber(field.value)) {
+                        errorMessage = 'Please enter a valid phone number';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'subject':
+                    if (field.value.trim().length < 5) {
+                        errorMessage = 'Subject must be at least 5 characters long';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'message':
+                    if (field.value.trim().length < 20) {
+                        errorMessage = 'Message must be at least 20 characters long';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'checkbox':
+                    if (!field.checked) {
+                        errorMessage = 'This agreement is required';
+                        isValid = false;
+                    }
+                    break;
+            }
+
+            // Update field styling
+            if (isValid) {
+                field.classList.remove('error');
+                field.classList.add('valid');
+            } else {
+                field.classList.remove('valid');
+                field.classList.add('error');
+            }
+            
+            if (errorElement) {
+                errorElement.textContent = errorMessage;
+            }
+            
+            return isValid;
+        }
+
+        // PART 3: Enhanced Enquiry Form Validation
+        function validateEnquiryForm() {
+            const requiredFields = [
+                'tipType', 'email', 'subject', 'message', 'followUp'
+            ];
+            
+            let isValid = true;
+            
+            // Validate all required fields
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!validateField(field)) {
+                    isValid = false;
+                }
+            });
+            
+            // Validate phone if provided
+            const phoneField = document.getElementById('phone');
+            if (phoneField.value && !validateField(phoneField)) {
+                isValid = false;
+            }
+            
+            if (isValid) {
+                submitEnquiryForm();
+            } else {
+                // Scroll to first error
+                const firstError = document.querySelector('.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        // PART 3: AJAX Form Submission for News Tips
+        function submitEnquiryForm() {
+            const formData = new FormData(document.getElementById('enquiryForm'));
+            
+            // Add location data if available
+            if (selectedLocation) {
+                formData.append('location', JSON.stringify(selectedLocation));
+            }
+            
+            // Show loading state
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Submitting...';
+            submitBtn.disabled = true;
+            
+            // Simulate AJAX call
+            fetch('https://jsonplaceholder.typicode.com/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(Object.fromEntries(formData))
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Simulate successful form processing
+                const mockResponse = {
+                    success: true,
+                    message: 'News tip submitted successfully!',
+                    data: {
+                        tipType: document.querySelector('#tipType option:checked').text,
+                        urgency: document.querySelector('input[name="urgency"]:checked').value,
+                        confidential: document.getElementById('confidential').checked,
+                        location: selectedLocation ? 'Location attached' : 'No location provided',
+                        tipId: 'TIP' + Date.now().toString().slice(-6),
+                        reviewTime: 'within 24 hours',
+                        priority: calculatePriority(),
+                        timestamp: new Date().toISOString()
+                    }
+                };
+                showEnquiryResponse(mockResponse);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showEnquiryError('Failed to submit news tip. Please try again or use the email option.');
+            })
+            .finally(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
+        }
+
+        // PART 3: Calculate priority based on urgency and content
+        function calculatePriority() {
+            const urgency = document.querySelector('input[name="urgency"]:checked').value;
+            const message = document.getElementById('message').value;
+            const tipType = document.getElementById('tipType').value;
+            
+            let score = 0;
+            
+            // Urgency score
+            const urgencyScores = { low: 1, medium: 3, high: 5, critical: 8 };
+            score += urgencyScores[urgency];
+            
+            // Content score based on length and detail
+            if (message.length > 200) score += 2;
+            if (message.includes('emergency') || message.includes('urgent')) score += 3;
+            
+            // Tip type score
+            if (tipType === 'critical' || tipType === 'investigation') score += 2;
+            
+            return score >= 8 ? 'HIGH' : score >= 5 ? 'MEDIUM' : 'LOW';
+        }
+
+        // PART 3: Enhanced Response Display
+        function showEnquiryResponse(response) {
+            const urgencyLabels = {
+                'low': '📋 Low Priority',
+                'medium': '⚠️ Medium Priority', 
+                'high': '🔥 High Priority',
+                'critical': '🚨 CRITICAL PRIORITY'
+            };
+
+            const responseHTML = `
+                <div class="success-message animated-entry">
+                    <div class="success-header">
+                        <h3>✅ ${response.message}</h3>
+                        <button onclick="this.parentElement.parentElement.remove()" class="close-btn">×</button>
+                    </div>
+                    <div class="success-details">
+                        <p><strong>Submission Type:</strong> ${response.data.tipType}</p>
+                        <p><strong>Urgency Level:</strong> ${urgencyLabels[response.data.urgency]}</p>
+                        <p><strong>Priority Assessment:</strong> ${response.data.priority}</p>
+                        <p><strong>Confidential:</strong> ${response.data.confidential ? 'Yes 🔒' : 'No'}</p>
+                        <p><strong>Location Data:</strong> ${response.data.location}</p>
+                        <p>Our editorial team will review your submission ${response.data.reviewTime}.</p>
+                        <div class="response-meta">
+                            <p><strong>Submitted:</strong> ${new Date(response.data.timestamp).toLocaleString()}</p>
+                            <p><em>Tip Reference #: ${response.data.tipId}</em></p>
+                        </div>
+                    </div>
+                    ${response.data.urgency === 'critical' || response.data.priority === 'HIGH' ? 
+                        '<div class="priority-alert">🚨 This has been flagged as high priority and will be reviewed immediately.</div>' : ''}
+                    <div class="success-actions">
+                        <button onclick="printEnquiryConfirmation()" class="print-btn">🖨️ Print Confirmation</button>
+                        <button onclick="clearEnquiryForm()" class="clear-btn">📝 New Submission</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('enquiryResponse').innerHTML = responseHTML;
+            document.getElementById('enquiryForm').reset();
+            document.getElementById('charCount').textContent = '0';
+            clearMapSelection();
+            
+            // Clear validation styles
+            document.querySelectorAll('.valid, .error').forEach(el => {
+                el.classList.remove('valid', 'error');
+            });
+            
+            document.getElementById('enquiryResponse').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+
+        function showEnquiryError(message) {
+            const errorHTML = `
+                <div class="error-message" style="background: #e74c3c; color: white; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                    <h3>❌ Submission Failed</h3>
+                    <p>${message}</p>
+                    <p>Please try again or use the email option below.</p>
+                </div>
+            `;
+            
+            document.getElementById('enquiryResponse').innerHTML = errorHTML;
+            document.getElementById('enquiryResponse').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // PART 3: Utility Functions
+        function updateCharCount(textarea) {
+            const count = textarea.value.length;
+            document.getElementById('charCount').textContent = count;
+            
+            const charCount = document.querySelector('#message + .char-count');
+            if (count > 900) {
+                charCount.className = 'char-count error';
+            } else if (count > 800) {
+                charCount.className = 'char-count warning';
+            } else {
+                charCount.className = 'char-count';
+            }
+            
+            validateField(textarea);
+        }
+
+        function validateFiles(input) {
+            const fileInfo = document.getElementById('fileInfo');
+            const files = input.files;
+            let totalSize = 0;
+            
+            if (files.length > 0) {
+                let fileList = [];
+                for (let i = 0; i < files.length; i++) {
+                    totalSize += files[i].size;
+                    fileList.push(files[i].name);
+                }
+                
+                // Check total size (max 10MB)
+                if (totalSize > 10 * 1024 * 1024) {
+                    document.getElementById('attachmentsError').textContent = 'Total file size exceeds 10MB limit';
+                    input.value = '';
+                    fileInfo.innerHTML = '';
+                } else {
+                    fileInfo.innerHTML = `Selected: ${fileList.join(', ')} (${(totalSize/1024/1024).toFixed(2)} MB)`;
+                }
+            } else {
+                fileInfo.innerHTML = '';
+            }
+        }
+
+        function clearEnquiryForm() {
+            document.getElementById('enquiryForm').reset();
+            document.getElementById('charCount').textContent = '0';
+            document.getElementById('enquiryResponse').innerHTML = '';
+            clearMapSelection();
+            
+            // Clear validation styles
+            document.querySelectorAll('.valid, .error').forEach(el => {
+                el.classList.remove('valid', 'error');
+            });
+            
+            // Clear error messages
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.textContent = '';
+            });
+            
+            document.getElementById('fileInfo').innerHTML = '';
+        }
+
+        function fillCategory(category) {
+            const subjectField = document.getElementById('subject');
+            if (!subjectField.value.includes(category)) {
+                subjectField.value = category + ' - ';
+                subjectField.focus();
+            }
+        }
+
+        function printEnquiryConfirmation() {
+            const responseContent = document.querySelector('.success-message').cloneNode(true);
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Daily Grand - News Tip Confirmation</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            .confirmation { border: 2px solid #27ae60; padding: 20px; border-radius: 8px; }
+                            .header { text-align: center; color: #27ae60; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="confirmation">
+                            ${responseContent.innerHTML}
+                        </div>
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Existing helper functions
+        function validatePhoneNumber(phone) {
+            const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
+            return phoneRegex.test(phone);
+        }
+
+        function generateNewsTipEmail() {
+            const subject = document.getElementById('subject').value || 'News Tip Submission';
+            const message = document.getElementById('message').value || 'I have a news tip to share...';
+            const tipType = document.querySelector('#tipType option:checked').text;
+            
+            const emailBody = `
+News Tip Submission:
+
+Type: ${tipType}
+Subject: ${subject}
+
+Details:
+${message}
+
+---
+Submitted via Daily Grand News Tip Form
+            `.trim();
+
+            const mailtoLink = `mailto:tips@dailygrand.com?subject=${encodeURIComponent('News Tip: ' + subject)}&body=${encodeURIComponent(emailBody)}`;
+            window.location.href = mailtoLink;
+        }
+
+        function initializeAccordions() {
+            const accordions = document.querySelectorAll('.accordion-btn');
+            accordions.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    content.classList.toggle('active');
+                });
+            });
+        }
+    </script>
+
+    <style>
+        /* PART 3: Additional CSS for News Tips page */
+        .interactive-map {
+            height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .map-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .location-btn, .clear-btn {
+            padding: 8px 16px;
+            border: 1px solid #3498db;
+            background: white;
+            color: #3498db;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .location-btn:hover {
+            background: #3498db;
+            color: white;
+        }
+        
+        .clear-btn {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+        
+        .clear-btn:hover {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .category-tag {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-tag:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .file-info {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .priority-alert {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .success-message.animated-entry {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        input.valid, textarea.valid, select.valid {
+            border-color: #27ae60 !important;
+        }
+        
+        input.error, textarea.error, select.error {
+            border-color: #e74c3c !important;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</body>
+</html>
