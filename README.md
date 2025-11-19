@@ -223,6 +223,7 @@ Form Functionality Implemented
 
 ## 📁 Project Structure
 daily-grand/
+
 ├── index.html          # Homepage with news ticker, filtering, and featured content
 
 ├── news.html           # News portal with search, filtering, and dynamic loading
