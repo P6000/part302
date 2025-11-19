@@ -361,6 +361,9 @@ daily-grand/
 
 -Performance Focus: Optimized assets and efficient code execution
 
+(W3Schools, 2023).
+
+
 ## Technical Highlights
 -Modular JavaScript: Reusable functions and organized code structure
 
@@ -369,6 +372,8 @@ daily-grand/
 -Form Security: Validation both client-side and server-side ready
 
 -SEO Best Practices: Comprehensive optimization following industry standards
+
+(W3Schools, 2023).
 
 ## References
 
